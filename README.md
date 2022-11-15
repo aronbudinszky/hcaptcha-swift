@@ -20,16 +20,21 @@ This will generate a token client side which you can then submit and verify serv
 
 ### Step 2
 
-Once you've generated the client-side widget, use this package to easily verify your request via any chosen server-side Swift solution (for example [Vapor](https://vapor.codes)) like so:
+Once you've generated the client-side widget, use this package to easily verify the token it generated via any chosen server-side Swift solution (for example [Vapor](https://vapor.codes)) like so:
 
 ```
+        // Create the client
         let hCaptchaClient = HCaptchaSwift.Client(secret: "- your secret token -")
-        let response = try await hCaptchaClient.verify("- verification token you received when the user completed the captcha -", remoteip: "- user's remote ip (optional) -", sitekey: "- your site key (optional)")
 
+        // Now try to verify
+        let response = try await hCaptchaClient.verify("- verification token you received when the user completed the captcha -", remoteip: "- user's remote ip (optional) -", sitekey: "- your site key (optional, but recommended)")
+        // - Note: In case of any errors (including when verification fails) the returned hCaptcha error codes will be thrown (see docs). But generally non-spam users won't be sending invalid verification tokens anyway (unless your implementation is weird / wrong), so regular users won't see these errors.
 
-        if response.success {
-            print("Yay! You are not a bot!")
-        } else {
-            print("Some problem(s) occurred: \(response.errors.joined(by: ", ")) ")
+        guard response else {
+            print("Verification failed.")
+            // This usually won't happen, but good to check just in case. Typically an error should already be thrown above if this is false. (Unfortunately hCaptcha docs are a bit unclear on this.)
+            return
         }
+        
+        print("Yay! You are not a bot!")
 ```

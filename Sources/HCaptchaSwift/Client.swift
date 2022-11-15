@@ -35,6 +35,10 @@ public extension HCaptchaSwift {
         // MARK: - Type definitions
         
         public enum Error: Swift.Error {
+            
+            /// An error thrown when hCaptcha one or more error codes
+            ///
+            /// The enum-version of the returned hCaptcha error codes are passed in as an array via associated value.
             case hCaptchaError(errors: [ErrorCode])
         }
         
