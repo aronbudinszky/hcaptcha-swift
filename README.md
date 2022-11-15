@@ -27,7 +27,11 @@ Once you've generated the client-side widget, use this package to easily verify 
         let hCaptchaClient = HCaptchaSwift.Client(secret: "- your secret token -")
 
         // Now try to verify
-        let response = try await hCaptchaClient.verify("- verification token you received when the user completed the captcha -", remoteip: "- user's remote ip (optional) -", sitekey: "- your site key (optional, but recommended)")
+        let response = try await hCaptchaClient.verify(
+            "- verification token you received when the user completed the captcha -",
+            remoteIp: "- user's remote ip (optional) -",
+            siteKey: "- your site key (optional, but recommended)"
+        )
         // - Note: In case of any errors (including when verification fails) the returned hCaptcha error codes will be thrown (see docs). But generally non-spam users won't be sending invalid verification tokens anyway (unless your implementation is weird / wrong), so regular users won't see these errors.
 
         guard response else {
